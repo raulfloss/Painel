@@ -28,7 +28,10 @@ export default async function DashboardPage() {
   hoje.setHours(0, 0, 0, 0);
 
   // ---- Indicadores ----
-  const total = demandas.length;
+  // "Total" conta apenas as demandas ativas: concluídas e canceladas saem da conta.
+  const total = demandas.filter(
+    (d) => d.status !== "concluida" && d.status !== "cancelada"
+  ).length;
   const emAndamento = demandas.filter((d) => d.status === "em_andamento").length;
   const concluidas = demandas.filter((d) => d.status === "concluida").length;
   const atrasadas = demandas.filter(
@@ -71,7 +74,7 @@ export default async function DashboardPage() {
 
       {/* Cards de indicadores */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Indicador titulo="Total" valor={total} icon={<Inbox size={20} />} cor="text-slate-600 bg-slate-100" />
+        <Indicador titulo="Em aberto" valor={total} icon={<Inbox size={20} />} cor="text-slate-600 bg-slate-100" />
         <Indicador titulo="Em andamento" valor={emAndamento} icon={<Loader2 size={20} />} cor="text-blue-600 bg-blue-100" />
         <Indicador titulo="Concluídas" valor={concluidas} icon={<CheckCircle2 size={20} />} cor="text-green-600 bg-green-100" />
         <Indicador titulo="Atrasadas" valor={atrasadas} icon={<AlertTriangle size={20} />} cor="text-red-600 bg-red-100" />
