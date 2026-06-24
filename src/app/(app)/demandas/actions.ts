@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail, emailTemplate } from "@/lib/email";
@@ -25,14 +24,18 @@ const STATUSES: DemandaStatus[] = [
 const PRIORIDADES: DemandaPrioridade[] = ["baixa", "media", "alta", "urgente"];
 
 export type FormState = { error?: string } | undefined;
+export type CriarResult = { error?: string; id?: string };
 
-/** Cria uma nova demanda e notifica o administrador por e-mail. */
-export async function criarDemanda(_prev: FormState, formData: FormData): Promise<FormState> {
+/**
+ * Cria uma nova demanda e notifica o administrador por e-mail.
+ * Retorna o id da demanda criada (para anexar arquivos em seguida).
+ */
+export async function criarDemanda(formData: FormData): Promise<CriarResult> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  if (!user) return { error: "Sessão expirada. Entre novamente." };
 
   const titulo = String(formData.get("titulo") || "").trim();
   const descricao = String(formData.get("descricao") || "").trim();
@@ -54,7 +57,7 @@ export async function criarDemanda(_prev: FormState, formData: FormData): Promis
     .select("id")
     .single();
 
-  if (error) return { error: "Não foi possível salvar a demanda. Tente novamente." };
+  if (error || !demanda) return { error: "Não foi possível salvar a demanda. Tente novamente." };
 
   // Notifica o administrador (não bloqueia em caso de falha de e-mail).
   if (EMAIL_ADMIN) {
@@ -84,7 +87,7 @@ export async function criarDemanda(_prev: FormState, formData: FormData): Promis
 
   revalidatePath("/demandas");
   revalidatePath("/dashboard");
-  redirect("/demandas");
+  return { id: demanda.id as string };
 }
 
 /** Atualiza o status de uma demanda (admin) e avisa o solicitante por e-mail. */

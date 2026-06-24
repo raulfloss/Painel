@@ -20,6 +20,7 @@ import {
   comentar,
   excluirDemanda,
 } from "./actions";
+import AnexosSecao from "./AnexosSecao";
 
 export default function DemandaDrawer({
   demanda,
@@ -110,6 +111,9 @@ export default function DemandaDrawer({
               <p className="whitespace-pre-wrap text-sm text-slate-700">{demanda.descricao}</p>
             </div>
           )}
+
+          {/* Anexos */}
+          <AnexosSecao demandaId={demanda.id} />
 
           {/* Status */}
           <div>

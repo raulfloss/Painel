@@ -31,6 +31,7 @@ npm install
 1. Acesse https://supabase.com → **New project**. Anote a senha do banco.
 2. No menu lateral, abra **SQL Editor → New query**.
 3. Copie todo o conteúdo de [`supabase/schema.sql`](supabase/schema.sql), cole e clique em **Run**. Isso cria as tabelas, regras de segurança e o tempo real.
+4. Crie outra query, cole o conteúdo de [`supabase/storage.sql`](supabase/storage.sql) e clique em **Run**. Isso cria o armazenamento de **anexos** (documentos/fotos) com as permissões de acesso.
 
 ### 3) Configurar as variáveis de ambiente
 1. Copie o arquivo de exemplo:
@@ -107,6 +108,7 @@ supabase/schema.sql   -> banco de dados (rodar uma vez)
 - Comentários/atualizações de progresso em tempo real
 - Dashboard com indicadores e gráficos
 - E-mail automático: nova demanda (para você) e mudança de status (para o solicitante)
+- Anexos (documentos, fotos, PDFs) nas demandas, com armazenamento privado e seguro
 
 ## 🔜 Próximos passos sugeridos
 - Notificação por WhatsApp (ex.: API oficial ou Z-API)

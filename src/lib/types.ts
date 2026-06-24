@@ -33,6 +33,17 @@ export interface Demanda {
   responsavel?: Pick<Profile, "id" | "nome" | "email"> | null;
 }
 
+export interface Anexo {
+  id: string;
+  demanda_id: string;
+  nome: string;
+  path: string;
+  mime: string | null;
+  tamanho: number | null;
+  autor_id: string;
+  created_at: string;
+}
+
 export interface Comentario {
   id: string;
   demanda_id: string;
